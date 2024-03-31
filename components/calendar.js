@@ -1,38 +1,36 @@
 import React, {useState} from 'react';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import { View , StyleSheet} from 'react-native';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 const CalendarComponent = () => {
   const [selected, setSelected] = useState('');
    return (
     <View style={styles.container}>
     <Calendar
     theme={{
-        backgroundColor: 'white',
-        calendarBackground: '#131927',
-        textSectionTitleColor: 'white',
-        selectedDayBackgroundColor: '#00adf5',
-        selectedDayTextColor: '#ffffff',
-        todayTextColor: 'white',
-        dayTextColor: '#2d4150',
-        textDisabledColor: '#d9e1e8',
-        dotColor: '#00adf5',
-        selectedDotColor: '#ffffff',
-        arrowColor: 'orange',
-         disabledArrowColor: '#d9e1e8',
-         monthTextColor: 'white',
-        indicatorColor: 'white',
-         textDayFontSize: 16,
-         textMonthFontSize: 16,
-         textDayHeaderFontSize: 16,
-        textInactiveColor: 'white',
-
-        
-       
+      backgroundColor: 'white',
+      calendarBackground: '#131927',
+      textSectionTitleColor: 'white',
+      selectedDayBackgroundColor:"red", 
+      selectedDayTextColor: '#ffffff',
+      todayTextColor: 'green',
+      dayTextColor: 'cyan',
+      textDisabledColor: 'gray',
+      dotColor: '#00adf5',
+      selectedDotColor: '#ffffff',
+      arrowColor: 'orange',
+      disabledArrowColor: '#d9e1e8',
+      monthTextColor: 'white',
+      indicatorColor: 'white',
+      textDayFontSize: 16,
+      textMonthFontSize: 16,
+      textDayHeaderFontSize: 16,
+      textInactiveColor: 'white',
     }}
     
       onDayPress={day => {
-        setSelected(day.dateString);
-        console.log('selected day', day);
+        styles.container.backgroundColor = 'red';
+           console.log('selected day', day);
         }}
 
 

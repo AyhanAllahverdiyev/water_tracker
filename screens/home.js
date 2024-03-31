@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import { View, Text, StyleSheet, Touchable, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Touchable, TouchableOpacity,TouchableWithoutFeedback, Keyboard } from "react-native";
 import globalStyles from "../styles/global";
 import { MaterialIcons } from '@expo/vector-icons';
 import WaterDrop from "../components/waterDrop";
@@ -24,6 +24,7 @@ const handleTargetSet=(target)=>{
 
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={globalStyles.container}>
       <Text style={styles.header}>Today</Text>
 
@@ -52,6 +53,7 @@ const handleTargetSet=(target)=>{
 
 
     </View>
+    </TouchableWithoutFeedback>
   );
 }
 

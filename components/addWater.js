@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, TextInput,Alert } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput,Alert ,TouchableWithoutFeedback, Keyboard} from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AddWater({ addWater, setDrinkedWaterAmount}) {
   const [waterAmount, setWaterAmount] = useState(0);
   const [toggleCustomInput, setToggleCustomInput] = useState(false);
-  const [customAmount, setCustomAmount] = useState('');
+  const [customAmount, setCustomAmount] = useState(0);
 
   const setInputValue = (text) => {
     setWaterAmount(parseInt(text));
   };
 
   const handleCustomAmountInput = (text) => {
-    setCustomAmount(text);
-    addWater(parseInt(text), setDrinkedWaterAmount);
-  };
+    if( (text === "" || isNaN(text) || parseInt(text, 10)===false ) <= 0){
+      setCustomAmount(parseInt(text, 10));
+    }
+    else{
+      setCustomAmount(0);
+         }
+   };
 
   const handleToggleCustomInput = () => {
     setToggleCustomInput(!toggleCustomInput);
@@ -22,58 +26,62 @@ export default function AddWater({ addWater, setDrinkedWaterAmount}) {
 
   const handleSubmit = () => {
     // Handle submission logic here
-    console.log("Submitted:", customAmount);
     // You can reset the input field and toggle state if needed
-    if(customAmount === "" || isNaN(customAmount) || parseInt(customAmount, 10) <= 0){{
+    if (customAmount === "" || isNaN(customAmount) || parseInt(customAmount, 10) <= 0) {
       Alert.alert('Error', 'Please enter a valid target');
+      setCustomAmount(0);
     }
-    setCustomAmount('');
+    else {
+    addWater(parseInt(customAmount), setDrinkedWaterAmount);
+    console.log("Submitted:", customAmount);
+    setCustomAmount(0);
     setToggleCustomInput(false);
+  }
   };
-}
+  
 
   return ( 
-    <View> 
-      <View style={styles.addWaterContainer}>
-        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginTop: 10 }}>Add a portion of water</Text>
-        <MaterialCommunityIcons name="water-plus" size={40} color="white" />
-      </View>
-      <View style={styles.buttonsAligner}>      
-         <TouchableOpacity style={[styles.cupButton, { flexDirection: 'row', alignItems: 'center' }]}>  
+       <View> 
+        <View style={styles.addWaterContainer}>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginTop: 10 }}>Add a portion of water</Text>
+          <MaterialCommunityIcons name="water-plus" size={40} color="white" />
+        </View>
+        <View style={styles.buttonsAligner}>      
+          <TouchableOpacity style={[styles.cupButton, { flexDirection: 'row', alignItems: 'center' }]}>  
             <MaterialCommunityIcons name="cup-water" size={25} color="white" />
             <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>CUP</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.cupButton, { flexDirection: 'row', alignItems: 'center' }]}>  
-          <MaterialCommunityIcons name="bottle-soda" size={25} color="white"  />
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>BOTTLE</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{ height: 30 }}></View>
-
-      <TouchableOpacity style={styles.customAmount} onPress={handleToggleCustomInput}>  
-        <MaterialCommunityIcons name="water-plus" size={25} color="white"  />
-        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Custom Amount</Text>
-      </TouchableOpacity>
-      {toggleCustomInput && (
-        <View style={styles.inputContainer}> 
-        <View style={{flexDirection:'row'}}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Amount"
-            keyboardType="numeric"
-            onChangeText={handleCustomAmountInput}
-            value={customAmount}
-          />
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitText}>Submit</Text>
           </TouchableOpacity>
-          </View>
+  
+          <TouchableOpacity style={[styles.cupButton, { flexDirection: 'row', alignItems: 'center' }]}>  
+            <MaterialCommunityIcons name="bottle-soda" size={25} color="white"  />
+            <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>BOTTLE</Text>
+          </TouchableOpacity>
         </View>
-
-      )}
-    </View>
-  );
+        <View style={{ height: 30 }}></View>
+  
+        <TouchableOpacity style={styles.customAmount} onPress={handleToggleCustomInput}>  
+          <MaterialCommunityIcons name="water-plus" size={25} color="white"  />
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Custom Amount</Text>
+        </TouchableOpacity>
+        {toggleCustomInput && (
+          <View style={styles.inputContainer}> 
+            <View style={{flexDirection:'row'}}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Amount"
+                keyboardType="numeric"
+                onChangeText={handleCustomAmountInput}
+                value={customAmount.toString()}
+              />
+              <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                <Text style={styles.submitText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </View>
+   );
+  
 }
 const styles = StyleSheet.create({ 
   cupButton: {
