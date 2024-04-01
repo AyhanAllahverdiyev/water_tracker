@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import { View, Text, StyleSheet, Touchable, TouchableOpacity,TouchableWithoutFeedback, Keyboard } from "react-native";
 import globalStyles from "../styles/global";
 import { MaterialIcons } from '@expo/vector-icons';
@@ -7,12 +7,19 @@ import AddWater from "../components/addWater";
 import DailyTarget from "../components/dailyTarget";
 
  
- export default function HomePage() {
+ export default function HomePage({route} ) {
 
-  const addWater = (amount, setDrinkedWaterAmount) => {
-    console.log('Adding water:', amount);
-    setDrinkedWaterAmount(prevTarget => prevTarget + amount);
-  }
+
+  
+  const {usersDailyTargetForParent, setDrinkedWaterAmountForParent, setUsersDailyTargetForParent,drinkedWaterAmountForParent, handleTargetSetForParent, addWaterForParent} = route.params;
+  
+
+
+
+    useEffect(() => {
+      setDrinkedWaterAmount(drinkedWaterAmountForParent);
+    }, [drinkedWaterAmountForParent]);
+  
 
 const [usersDailyTarget, setUsersDailyTarget] = useState(0);
 const [drinkedWaterAmount, setDrinkedWaterAmount] = useState(0);
@@ -20,8 +27,14 @@ const [drinkedWaterAmount, setDrinkedWaterAmount] = useState(0);
 const handleTargetSet=(target)=>{
     setUsersDailyTarget(target)
     console.log(target + " is the target")
-}
+    handleTargetSetForParent(target,setUsersDailyTargetForParent)
+  }
 
+const handleConsumedSet=(consumed)=>{
+  setDrinkedWaterAmount(consumed);
+  console.log(consumed + " is the consumed amount")
+
+}
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -47,7 +60,7 @@ const handleTargetSet=(target)=>{
         </View>
       </View>
       <View>        
-         <AddWater addWater={addWater} setDrinkedWaterAmount={setDrinkedWaterAmount}/>
+         <AddWater handleConsumedSet={handleConsumedSet}/>
       </View> 
        
 

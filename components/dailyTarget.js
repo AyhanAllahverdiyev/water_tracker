@@ -3,12 +3,56 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from "reac
 
  
 
-export default function DailyTarget({onTargetSet}) {
+
  
 
+
+export default function DailyTarget({onTargetSet}) {
+ 
   const [dailyTarget, setDailyTarget] = useState(0);
   const [inputValue, setInputValue] = useState(0);
 
+
+  const PostUsersDailyTarget=async()=>{
+    try{
+      const response=await fetch('http://localhost:4000/userTarget', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          "date": new Date().toISOString().slice(0,10),
+          "targetAmount":dailyTarget
+        })
+      })
+      const responseData=await response.json()
+      console.log(responseData);
+      if(response.status===200){
+        console.log('Target is set====================> V');
+        Alert.alert('Ready!', 'Target is set',[
+          {
+            text:'Okay',
+            
+            style:'cancel'
+          
+          }
+        
+        ]);
+      }
+     } catch(err){
+      console.log(err)
+      Alert.alert('Error', 'Something went wrong',[
+        {
+          text:'Okay',   
+          style:'cancel'
+        }
+
+      ])
+    }
+   }
+  
+
+ 
   const handleSetTarget = () => {
     if (inputValue === "" || isNaN(inputValue) || parseInt(inputValue, 10) <= 0) {
       Alert.alert('Error', 'Please enter a valid target');
@@ -17,6 +61,7 @@ export default function DailyTarget({onTargetSet}) {
     const target = parseInt(inputValue, 10);
     setDailyTarget(target);
     onTargetSet(target); 
+    PostUsersDailyTarget();
   };
   return (
     <View style={styles.target}>

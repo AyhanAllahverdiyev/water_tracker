@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useState} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
  import HomePage from './screens/home';
 import AnalysisPage from './screens/analysis';
@@ -8,6 +8,24 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const Tab = createBottomTabNavigator();
 
 export default function MyTabs() {
+  const [usersDailyTargetForParent, setUsersDailyTargetForParent] = useState(0);
+  const [drinkedWaterAmountForParent, setDrinkedWaterAmountForParent] = useState(1);
+
+  const addWaterForParent =  (amount) => {
+    const prevAmount = drinkedWaterAmountForParent;
+    console.log('Previous amount FOR PARENT:', prevAmount);
+    const newDrinkedWaterAmount = prevAmount + amount;
+    console.log('New drinked water amount FOR PARENT:', newDrinkedWaterAmount);
+     setDrinkedWaterAmountForParent(newDrinkedWaterAmount);
+    console.log('DRINKED WATER AMOUNT FOR PARENT:', drinkedWaterAmountForParent);
+  }
+
+  const handleTargetSetForParent = (target, setUsersDailyTargetForParent) => {
+    setUsersDailyTargetForParent(target);
+    console.log('TARGET FOR PARENT:', usersDailyTargetForParent)
+   }
+
+
   return (
     <Tab.Navigator
     screenOptions={{
@@ -21,11 +39,14 @@ export default function MyTabs() {
       <Tab.Screen
         name="Main"
         component={HomePage}
+        initialParams={{ usersDailyTargetForParent,setDrinkedWaterAmountForParent, setUsersDailyTargetForParent, drinkedWaterAmountForParent, handleTargetSetForParent, addWaterForParent }}
         options={{
+        
           headerTitle: "Water Tracker",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={30} />
           ),
+          
            
           headerTitleStyle: {
             fontSize: 24,
@@ -74,7 +95,8 @@ export default function MyTabs() {
             />
           ),
         }}
+
       />
-    </Tab.Navigator>
+     </Tab.Navigator>
   );
 }
